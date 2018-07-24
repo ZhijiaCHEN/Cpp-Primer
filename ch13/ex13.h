@@ -2,7 +2,7 @@
 #define ex13_h
 
 #include <string>
-
+#include <iostream>
 class HasPtr {
 public:
     HasPtr(const std::string &s = std::string()) : ps(new std::string(s)), i(0) { }
@@ -19,9 +19,37 @@ public:
         }
         return *this;
     }
+
+    ~HasPtr () 
+    {
+        std::cout<<"object destroyed."<<std::endl;
+        getchar();
+    };
 private:
     std::string *ps;
     int i;
+};
+
+struct X
+{
+public:
+    X() 
+    {
+        std::cout << "X()" << std::endl;
+    }
+    X(const X&)
+    {
+        std::cout << "X(const X&)" << std::endl;
+    }
+    X& operator= (const X &rhs)
+    {
+        std::cout << "X& operator= (const X &rhs)" << std::endl;
+        return *this;
+    }
+    ~X()
+    {
+        std::cout << "~X()" << std::endl;
+    }
 };
 
 #endif
