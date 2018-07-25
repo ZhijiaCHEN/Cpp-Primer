@@ -3,6 +3,9 @@
 
 #include <string>
 #include <iostream>
+
+
+
 class HasPtr {
 public:
     HasPtr(const std::string &s = std::string()) : ps(new std::string(s)), i(0) { }
@@ -52,4 +55,24 @@ public:
     }
 };
 
+unsigned int genSN()
+{
+    static unsigned int sn = 0;
+    return ++sn;
+}
+
+class Numbered
+{
+public:
+    Numbered():mysn(genSN()){}
+    unsigned int mysn;
+};
+
+class Numbered_13_15
+{
+public:
+    Numbered_13_15():mysn(genSN()){}
+    Numbered_13_15(const Numbered_13_15& n):mysn(genSN()){}
+    unsigned int mysn;
+};
 #endif

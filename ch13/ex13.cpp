@@ -12,12 +12,53 @@ void testX(X x1, const X &x2)
     xv.push_back(*xp);
     return;
 }
-int main(int argc, char const *argv[])
+
+void printSN(Numbered n)
+{
+    std::cout<<n.mysn<<std::endl;
+}
+
+void printSN_ref(const Numbered &n)
+{
+    std::cout<<n.mysn<<std::endl;
+}
+
+void printSN(Numbered_13_15 n)
+{
+    std::cout<<n.mysn<<std::endl;
+}
+
+void printSN_ref(const Numbered_13_15 &n)
+{
+    std::cout<<n.mysn<<std::endl;
+}
+
+void ex13_1_3()
 {
     X *px = new X();
     X x = *px;
     x = *px;
     testX(*px, x);
+    return;
+}
+
+void ex13_1_4()
+{
+    //13.14
+    Numbered a, b=a, c=b;
+    printSN(a);printSN(b);printSN(c);
+    //13.15
+    Numbered_13_15 d, e=d, f=e;
+    printSN(d);printSN(e);printSN(f);
+    //13.16
+    printSN_ref(d);printSN_ref(e);printSN_ref(f);
+
+}
+
+int main(int argc, char const *argv[])
+{
+    ex13_1_4();
+    getchar();
     return 0;
 }
 
