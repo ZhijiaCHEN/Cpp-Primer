@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+using std::string;
 
 
 
@@ -74,5 +75,19 @@ public:
     Numbered_13_15():mysn(genSN()){}
     Numbered_13_15(const Numbered_13_15& n):mysn(genSN()){}
     unsigned int mysn;
+};
+
+class Employee
+{
+public:
+    Employee();
+    Employee(const string &nm);
+    Employee(const Employee &a) = delete;
+    Employee& operator= (const Employee &rhs) = delete;
+    string name;
+    int ID;
+private:
+    static int idGen;
+
 };
 #endif

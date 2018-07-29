@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+using std::cout, std::endl;
 
 void testX(X x1, const X &x2)
 {
@@ -55,9 +56,28 @@ void ex13_1_4()
 
 }
 
+int Employee::idGen = 0;
+Employee::Employee()
+{
+    ID = ++idGen;
+}
+
+Employee::Employee(const string &nm)
+{
+    ID = ++idGen;
+    name = nm;
+}
+
+void ex13_1_6()
+{
+    Employee a, b("foobar");
+    cout<<a.ID<<endl;
+    cout<<b.ID<<endl;
+}
+
 int main(int argc, char const *argv[])
 {
-    ex13_1_4();
+    ex13_1_6();
     getchar();
     return 0;
 }
