@@ -68,6 +68,12 @@ Employee::Employee(const string &nm)
     name = nm;
 }
 
+StrBlob& StrBlob::operator=(const StrBlob &sb)
+{
+    data = std::make_shared<vector<string>>(*sb.data);
+    return *this;
+}
+
 void ex13_1_6()
 {
     Employee a, b("foobar");
@@ -77,7 +83,7 @@ void ex13_1_6()
 
 int main(int argc, char const *argv[])
 {
-    ex13_1_6();
+    StrBlob a;
     getchar();
     return 0;
 }
