@@ -8,7 +8,8 @@
 #include <memory>
 #include <exception>
 
-using std::string; using std::vector;
+using std::string;
+using std::vector;
 
 class HasPtr {
 public:
@@ -35,6 +36,38 @@ public:
 private:
     std::string *ps;
     int i;
+};
+
+class HasPtrActsPtr {
+public:
+    HasPtrActsPtr(const std::string &s = std::string()): ps(new std::string(s)), i(0), use(new std::size_t(1)){}
+    HasPtrActsPtr(const HasPtrActsPtr &p):
+        ps(p.ps), i(p.i), use(p.use) {++*use;}
+    HasPtrActsPtr& operator=(const HasPtrActsPtr &rhs)
+    {
+        ++*rhs.use;
+        if (--*use == 0)
+        {
+            delete ps;
+            delete use;
+        }
+        ps = rhs.ps;
+        i = rhs.i;
+        use = rhs.use;
+        return *this;
+    }
+    ~HasPtrActsPtr()
+    {
+        if(--*use == 0)
+        {
+            delete ps;
+            delete use;
+        }
+    }
+private:
+    string *ps;
+    int i;
+    size_t *use;
 };
 
 struct X
@@ -146,5 +179,64 @@ private:
     {
         if(i >= data->size()) throw std::out_of_range(msg);
     }
+};
+
+class TreeNode
+{
+public:
+    TreeNode(const string &s = string()): value(s), count(new int(1)), left(nullptr), right(nullptr){}
+    TreeNode(const TreeNode &n): value(n.value), count(n.count), left(n.left), right(n.right)
+    {
+        ++*count;
+    }
+    TreeNode &operator=(const TreeNode &rhs)
+    {
+        ++*rhs.count;
+        if(--*count == 0)
+        {
+            delete count;
+            delete left;
+            delete right;
+        }
+        value = rhs.value;
+        left = rhs.left;
+        right = rhs.right;
+        count = rhs.count;
+        return *this;
+    }
+    ~TreeNode()
+    {
+        if(--*count == 0)
+        {
+            delete left;
+            delete right;
+            delete count;
+        }
+    }
+private:
+    string value;
+    int *count;
+    TreeNode *left;
+    TreeNode *right;
+};
+
+class BinStrTree
+{
+public:
+    BinStrTree(const string &s = string()): root(new TreeNode(s)){}
+    BinStrTree(const BinStrTree &bst): root(new TreeNode(*bst.root)){}
+    BinStrTree &operator=(const BinStrTree &rhs)
+    {
+        TreeNode *new_root = new TreeNode(*rhs.root); 
+        delete root;
+        root = new_root;
+        return *this;
+    }
+    ~BinStrTree()
+    {
+        delete root;
+    }
+private:
+    TreeNode *root;
 };
 #endif

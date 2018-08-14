@@ -81,9 +81,24 @@ void ex13_1_6()
     cout<<b.ID<<endl;
 }
 
+void ex13_2_2()
+{
+    HasPtrActsPtr a("hello world");
+    HasPtrActsPtr b(a);
+    HasPtrActsPtr c;
+    c = c;
+    c = a;
+
+    BinStrTree t1("hello world");
+    BinStrTree t2("hello world2");
+    t2 = t1;
+    t1 = t1;
+    return;
+}
+
 int main(int argc, char const *argv[])
 {
-    StrBlob a;
+    ex13_2_2();
     getchar();
     return 0;
 }
