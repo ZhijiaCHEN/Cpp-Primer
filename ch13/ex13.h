@@ -3,41 +3,50 @@
 
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <initializer_list>
 #include <memory>
 #include <exception>
+#include <set>
 
 using std::string;
 using std::vector;
 
 class HasPtr {
+    friend void swap(HasPtr&, HasPtr&);
+    friend bool operator<(const HasPtr&, const HasPtr&);
 public:
     HasPtr(const std::string &s = std::string()) : ps(new std::string(s)), i(0) { }
     HasPtr(const HasPtr& hp) : ps(new std::string(*hp.ps)), i(hp.i) { }
 
-    HasPtr& operator= (const HasPtr &rhs) 
+    HasPtr& operator= (HasPtr rhs) 
     {
-        if(this != &rhs)
-        {
-            std::string *temp_ps = new std::string(*rhs.ps);
-            delete ps;//prevent memory leak
-            ps = temp_ps;
-            i = rhs.i;
-        }
+        swap(*this, rhs);
         return *this;
     }
 
     ~HasPtr () 
     {
-        std::cout<<"object destroyed."<<std::endl;
-        getchar();
+        delete ps;
     };
 private:
     std::string *ps;
     int i;
 };
+inline
+void swap(HasPtr &lhs, HasPtr &rhs)
+{
+    using std::swap;
+    swap(lhs.ps, rhs.ps);
+    swap(lhs.i, rhs.i);
+    std::cout << "call swap(HasPtr& lhs, HasPtr& rhs)" << std::endl;
+}
 
+bool operator<(const HasPtr &lhs, const HasPtr &rhs)
+{
+    return lhs.ps->length() < rhs.ps->length();
+}
 class HasPtrActsPtr {
 public:
     HasPtrActsPtr(const std::string &s = std::string()): ps(new std::string(s)), i(0), use(new std::size_t(1)){}
@@ -239,4 +248,27 @@ public:
 private:
     TreeNode *root;
 };
+
+
+class Folder;
+
+class Message
+{
+    friend class Folder;
+private:
+    string contents;
+    std::set<Folder*> folders;
+    void add_to_folders(const Message&);
+    void remove_from_folder();
+public:
+    // folders is implicitly initialized to the empty set
+    explicit Message(const string &str = ""): contents(str){}
+    Message(const Message&);
+    Message& operator=(const Message&);
+    ~Message();
+    void save(Folder&);
+    void remove(Folder&);
+};
+
+void swap(Message &lhs, Message &rhs);
 #endif

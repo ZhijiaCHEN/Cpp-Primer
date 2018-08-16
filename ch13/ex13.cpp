@@ -96,9 +96,81 @@ void ex13_2_2()
     return;
 }
 
+void ex13_3()
+{
+    vector<HasPtr> v;
+    v.push_back(HasPtr("ccc"));
+    v.push_back(HasPtr("b"));
+    v.push_back(HasPtr("ab"));
+    v.push_back(HasPtr("ba"));
+    std::sort(v.begin(), v.end());
+    getchar();
+}
+
+void Message::save(Folder &f)
+{
+    folders.insert(&f);
+    f.addMsg(this);
+}
+
+void Message::remove(Folder &f)
+{
+    folders.erase(f);
+    f.remMsg(this);
+}
+
+void Message::add_to_folders(const Message &m)
+{
+    for (auto f : m.folders)
+        f->addMsg(this);
+}
+
+Message::Message(const Message &m): contents(m.contents), folderse(m.folders)
+{
+    add_to_folders(m);
+}
+
+void Message::remove_from_folders()
+{
+    for (auto f : folders)
+        f->remMsg(this);
+}
+
+Message::~Message()
+{
+    remove_from_folders();
+}
+
+Message& Message::operator=(const Message &rhs)
+{
+    remove_from_folders():
+    contents = rhs.contents;
+    folders = rhs.folders;
+    add_to_folders(rhs);
+    return *this;
+}
+
+void swap(Message &lhs, Message &rhs)
+{
+    using std::swap;
+    for (auto f : lhs.folders)
+    {
+        f->remMsg(&lhs);
+        f->addMsg(&rhs);
+    }
+        
+    for (auto f : rhs.folders)
+    {    
+        f->remMsg(&rhs);
+        f->addMsg(&lhs);
+    }
+    
+    swap(lhs.folders, rhs.folders);
+    swap(lhs.contents, rhs.contents);
+}
 int main(int argc, char const *argv[])
 {
-    ex13_2_2();
+    ex13_3();
     getchar();
     return 0;
 }
